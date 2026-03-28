@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int coeff;
+    int exp;
+    struct Node* next;
+};
+
+struct Node* createNode(int c, int e) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->coeff = c;
+    newNode->exp = e;
+    newNode->next = NULL;
+    return newNode;
+}
+
+struct Node* insert(struct Node* head, int c, int e) {
+    struct Node* newNode = createNode(c, e);
+
+    if (head == NULL || head->exp < e) {
+        newNode->next = head;
+        return newNode;
+    }
+
+    struct Node* temp = head;
+
+    while (temp->next != NULL && temp->next->exp >= e)
+        temp = temp->next;
+
+    newNode->next = temp->next;
+    temp->next = newNode;
+
+    return head;
+}
+
+void display(struct Node* head) {
+    struct Node* temp = head;
+
+    while (temp != NULL) {
+        printf("%dx^%d", temp->coeff, temp->exp);
+
+        if (temp->next != NULL)
+            printf(" + ");
+
+        temp = temp->next;
+    }
+}
+
+int main() {
+    int n, c, e;
+    struct Node* head = NULL;
+
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        scanf("%d %d", &c, &e);
+        head = insert(head, c, e);
+    }
+
+    display(head);
+
+    return 0;
+}
